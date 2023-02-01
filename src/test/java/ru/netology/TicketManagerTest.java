@@ -4,18 +4,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
+
 public class TicketManagerTest {
     TicketRepository repo = new TicketRepository();
     TicketManager manager = new TicketManager(repo);
+    Comparator<Ticket> comparator = new TicketByTravelTimeAscComparator();
 
-    Ticket ticket1 = new Ticket(16, 9000, "KUF", "DME", 90);
+    Ticket ticket1 = new Ticket(16, 9000, "KUF", "DME", 95);
     Ticket ticket2 = new Ticket(25, 7500, "SGC", "LED", 190);
     Ticket ticket3 = new Ticket(78, 22000, "VVO", "KGD", 840);
-    Ticket ticket4 = new Ticket(8, 7500, "KUF", "DME", 90);
+    Ticket ticket4 = new Ticket(8, 7500, "KUF", "DME", 110);
     Ticket ticket5 = new Ticket(41, 6000, "KRR", "MCX", 80);
-    Ticket ticket6 = new Ticket(37, 8000, "KUF", "DME", 90);
+    Ticket ticket6 = new Ticket(37, 8000, "KUF", "DME", 80);
     Ticket ticket7 = new Ticket(16, 4500, "KRR", "MCX", 80);
-    Ticket ticket8 = new Ticket(55, 9000, "KUF", "DME", 90);
+    Ticket ticket8 = new Ticket(55, 9000, "KUF", "DME", 100);
 
 
     @BeforeEach
@@ -35,6 +38,13 @@ public class TicketManagerTest {
     public void shouldAllTicketSearchByAirport() {
         Ticket[] expected = {ticket4, ticket6, ticket1, ticket8};
         Ticket[] actual = (manager.findAll("KUF", "DME"));
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldAllTicketSearchByTravelTime() {
+        Ticket[] expected = {ticket6, ticket1, ticket8, ticket4};
+        Ticket[] actual = (manager.findAll("KUF", "DME", comparator));
         Assertions.assertArrayEquals(expected, actual);
     }
 

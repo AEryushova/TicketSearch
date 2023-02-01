@@ -1,6 +1,7 @@
 package ru.netology;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class TicketManager {
     private TicketRepository repo;
@@ -26,6 +27,22 @@ public class TicketManager {
             }
         }
         Arrays.sort(result);
+        return result;
+    }
+
+    public Ticket[] findAll(String from, String to, Comparator<Ticket> comparator) {
+        Ticket[] result = new Ticket[0];
+        for (Ticket tick : repo.findAll()) {
+            if (coincidence(tick, from, to)) {
+                Ticket[] search = new Ticket[result.length + 1];
+                for (int i = 0; i < result.length; i++) {
+                    search[i] = result[i];
+                }
+                search[search.length - 1] = tick;
+                result = search;
+            }
+        }
+        Arrays.sort(result, comparator);
         return result;
     }
 
